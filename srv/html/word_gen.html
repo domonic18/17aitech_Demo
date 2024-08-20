@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>助听器 API 调用</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #loading {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>助听器 API 调用</h1>
+    <input type="text" id="inputField" value="助听器，清晰，方便，便宜，聆听世界">
+    <button id="submitButton">提交</button>
+    <div id="loading">正在发送请求...</div>
+    <h2>返回内容：</h2>
+    <input type="text" id="responseField" readonly>
+
+    <script>
+        document.getElementById('submitButton').addEventListener('click', function() {
+            const inputField = document.getElementById('inputField');
+            const responseField = document.getElementById('responseField');
+            const loading = document.getElementById('loading');
+
+            const data = {
+                ad_words: inputField.value
+            };
+
+            loading.style.display = 'block';
+            responseField.value = '';
+
+            fetch('http://api.17aitech.com:8001/gen/invoke', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                responseField.value = JSON.stringify(data);
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                responseField.value = '请求失败: ' + error;
+            });
+        });
+    </script>
+
+</body>
+</html>
