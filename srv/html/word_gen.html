@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>助听器 API 调用</title>
+    <title>广告文案生成器</title>
     <style>
         body {
             background-color: black;
@@ -17,13 +17,23 @@
             margin: 0;
         }
         input[type="text"] {
-            width: 300px;
+            width: 60%;
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #555;
             border-radius: 5px;
             background-color: #222;
             color: white;
+            resize: both; /* 允许调整大小 */
+        }
+        #responseField {
+            width: 60%; /* 设置为页面宽度 */
+            height: 200px; /* 默认高度为10行 */
+            resize: both; /* 允许调整大小 */
+            background-color: #888; /* 设置背景为灰色 */
+            color: white; /* 字体颜色为白色 */
+            border: 1px solid #555; /* 边框样式 */
+            border-radius: 5px; /* 边框圆角 */
         }
         button {
             padding: 10px 20px;
@@ -40,16 +50,24 @@
             display: none;
             margin-top: 10px;
         }
+		.introduction {
+            margin-bottom: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <h1>助听器 API 调用</h1>
+    <h1>广告文案生成器</h1>
+	<div class="introduction">
+        <p>这是一款面向老年人的产品文案生成器，</p>
+        <p>在编辑框内输入关键词，页面会自动根据关键词生成广告文案。</p>
+    </div>
     <input type="text" id="inputField" value="助听器，清晰，方便，便宜，聆听世界">
     <button id="submitButton">提交</button>
     <div id="loading">正在发送请求...</div>
-    <h2>返回内容：</h2>
-    <input type="text" id="responseField" readonly>
+    <h2>生成的文案：</h2>
+    <textarea id="responseField" readonly></textarea> <!-- 使用 textarea 替代 input -->
 
     <script>
         document.getElementById('submitButton').addEventListener('click', function() {
@@ -69,7 +87,8 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
+                mode: 'cors' // 跨域访问
             })
             .then(response => response.json())
             .then(data => {
