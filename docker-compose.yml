@@ -8,6 +8,7 @@ services:
     volumes:
       - ./srv:/var/www/html
       - ./nginx:/etc/nginx/conf.d
+      - ./cert:/etc/nginx/cert
       - ./php:/usr/local/etc/php/conf.d
       - ./php-fpm:/usr/local/etc/php-fpm.d
       - ./supervisor:/etc/supervisor/conf.d
@@ -28,6 +29,7 @@ services:
       - local-shared-net
     ports:
       - '8081:80'
+      - '443:443'
   # redis-server:
   #   image: redis:latest
   #   container_name: redis
