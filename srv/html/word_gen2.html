@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>广告文案生成器</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        input[type="text"] {
+            width: 60%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+            resize: both; /* 允许调整大小 */
+        }
+        #responseField {
+            width: 60%; /* 设置为页面宽度 */
+            height: 200px; /* 默认高度为10行 */
+            resize: both; /* 允许调整大小 */
+            background-color: #888; /* 设置背景为灰色 */
+            color: white; /* 字体颜色为白色 */
+            border: 1px solid #555; /* 边框样式 */
+            border-radius: 5px; /* 边框圆角 */
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #loading {
+            display: none;
+            margin-top: 10px;
+        }
+		.introduction {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h1>广告文案生成器</h1>
+	<div class="introduction">
+        <p>这是一款面向老年人的产品文案生成器，</p>
+        <p>在编辑框内输入关键词，页面会自动根据关键词生成广告文案。</p>
+    </div>
+    <input type="text" id="inputField" value="助听器，清晰，方便，便宜，聆听世界">
+    <button id="submitButton">提交</button>
+    <div id="loading">正在发送请求...</div>
+    <h2>生成的文案：</h2>
+    <textarea id="responseField" readonly></textarea> <!-- 使用 textarea 替代 input -->
+
+    <script>
+        $(document).ready(function() {
+            $('#submitButton').click(function() {
+                const inputField = $('#inputField');
+                const responseField = $('#responseField');
+                const loading = $('#loading');
+
+                const data = {
+                    ad_words: inputField.val()
+                };
+
+                loading.show();
+                responseField.val('');
+
+                $.ajax({
+                    url: 'http://api.17aitech.com:8001/api/gen/invoke',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data),
+                    dataType: 'json',
+                    success: function(response) {
+                        loading.hide();
+                        responseField.val(JSON.stringify(response));
+                    },
+                    error: function(xhr, status, error) {
+                        loading.hide();
+                        responseField.val('请求失败: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
